@@ -1,0 +1,25 @@
+This is the arrangement for images for both colours of chess pieces. So when writing the code, do so for this file name arrangement:
+
+File name example  ->  Chess Pieces_Black_001.png / Chess Pieces_White_001.png
+
+001 - 008  ->  Pawns x 8
+009 - 010  ->  Castle x 2
+011 - 012  ->  Knights x 2
+013 - 014  ->  Bishop x 2
+015        ->  King
+016        ->  Queen
+
+
+Layout of my files in project folder:
+
+Chess Pieces_Black
+|-> Chess Pieces_Black_001.png
+|.
+|.
+|-> Chess Pieces_Black_016.png
+
+Chess Pieces_White
+|-> Chess Pieces_White_001.png
+|.
+|.
+|-> Chess Pieces_White_016.png
