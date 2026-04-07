@@ -100,8 +100,8 @@ def main():
     screen = pygame.display.set_mode((WINDOW_W, WINDOW_H + 80))
     pygame.display.set_caption("Chess Board")
 
-    label_font  = pygame.font.SysFont("chineserocks", NORMAL_LABEL_SIZE)
-    winner_font = pygame.font.SysFont("chineserocks", WINNER_LABEL_SIZE)
+    label_font  = pygame.font.Font("assets/fonts/chinese-rocks-rg.ttf", NORMAL_LABEL_SIZE)
+    winner_font = pygame.font.Font("assets/fonts/chinese-rocks-rg.ttf", WINNER_LABEL_SIZE)
     clock = pygame.time.Clock()
 
     pieces = ChessPieces(SQUARE_SIZE, PIECE_SIZE)  # Class object for each piece

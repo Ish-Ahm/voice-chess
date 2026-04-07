@@ -31,20 +31,20 @@ class ChessPieces:
 
         FILE_MAP = {
             WHITE: {
-                PAWN:   ["white-pawn.png"],
-                ROOK:   ["white-rook.png"],
-                KNIGHT: ["white-knight.png"],
-                BISHOP: ["white-bishop.png"],
-                KING:   ["white-king.png"],
-                QUEEN:  ["white-queen.png"],
+                PAWN:   ["images/white-pawn.png"],
+                ROOK:   ["images/white-rook.png"],
+                KNIGHT: ["images/white-knight.png"],
+                BISHOP: ["images/white-bishop.png"],
+                KING:   ["images/white-king.png"],
+                QUEEN:  ["images/white-queen.png"],
             },
             BLACK: {
-                PAWN:   ["black-pawn.png"],
-                ROOK:   ["black-rook.png"],
-                KNIGHT: ["black-knight.png"],
-                BISHOP: ["black-bishop.png"],
-                KING:   ["black-king.png"],
-                QUEEN:  ["black-queen.png"],
+                PAWN:   ["images/black-pawn.png"],
+                ROOK:   ["images/black-rook.png"],
+                KNIGHT: ["images/black-knight.png"],
+                BISHOP: ["images/black-bishop.png"],
+                KING:   ["images/black-king.png"],
+                QUEEN:  ["images/black-queen.png"],
             }
         }
 
