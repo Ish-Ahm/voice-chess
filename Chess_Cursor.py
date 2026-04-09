@@ -54,18 +54,28 @@ class Cursor:
 
         if self.holding is not None:
             destination = (self.row, self.column)
+
             if destination in self.valid_moves:
-                # Valid move, place piece and capture any enemy on that square
+                # store move BEFORE clearing state
+                from_pos = self.holding_from
+                to_pos   = (self.row, self.column)
+
+                # apply move
                 board[self.row][self.column] = self.holding
+
+                # clear state
                 self.holding      = None
                 self.holding_from = None
                 self.valid_moves  = []
-                return True   # Drop was successful
+
+                return True, from_pos, to_pos
+
             else:
-                # Invalid square, cancel and return piece
+                # invalid move → revert
                 self.cancel(board)
-                return False  # Drop was unsuccessful
-        return False
+                return False, None, None
+
+        return False, None, None
 
     
     def draw_valid_moves(self, screen, border, square_size, dot_radius):

@@ -3,6 +3,7 @@
 from Chess_Config import *
 from Chess_Cursor import Cursor
 from Chess_Pieces_Temp import ChessPieces, KING, WHITE, BLACK
+from Chess_Network import Network
 
 
 # ---- CHESS BOARD -------------------------------------------------
@@ -29,7 +30,7 @@ def draw_sidebar(screen):
     pygame.draw.rect(screen, Colours.GREY, pygame.Rect(x, y, width, height))
 
 
-def draw_border_labels(screen, font):
+def draw_border_labels(screen, font, game_mode):
     """Draw rank numbers and file letters centered in the border strips."""
 
     letters = "ABCDEFGH"
@@ -45,12 +46,15 @@ def draw_border_labels(screen, font):
         ly_bottom = BOARD_PX + BORDER + BORDER // 2 - letters_surf.get_height() // 2
         screen.blit(letters_surf, (lx, ly_bottom))
 
-        # Top border (180 rotation, reversed order)
+        # Top border
         letters_surf_top = font.render(letters[i], True, Colours.LABEL)
-        letters_surf_top = pygame.transform.rotate(letters_surf_top, 180)
-        fx_top = BORDER + center_offset - letters_surf_top.get_width() // 2
-        fy_top = BORDER // 2 - letters_surf_top.get_height() // 2
-        screen.blit(letters_surf_top, (fx_top, fy_top))
+
+        if game_mode == "LOCAL":
+            letters_surf_top = pygame.transform.rotate(letters_surf_top, 180)
+
+        lx_top = BORDER + center_offset - letters_surf_top.get_width() // 2
+        ly_top = BORDER // 2 - letters_surf_top.get_height() // 2
+        screen.blit(letters_surf_top, (lx_top, ly_top))
 
         # --- Rank numbers (8-1) on left and right border ---
         numbers_surf = font.render(str(BOARD_SQUARES - i), True, Colours.LABEL)
@@ -60,9 +64,12 @@ def draw_border_labels(screen, font):
         nx_left = BORDER // 2 - numbers_surf.get_width() // 2
         screen.blit(numbers_surf, (nx_left, ny))
 
-        # Right border (180 rotation, reversed order)
+        # Right border
         numbers_surf_right = font.render(str(8 - i), True, Colours.LABEL)
-        numbers_surf_right = pygame.transform.rotate(numbers_surf_right, 180)
+
+        if game_mode == "LOCAL":
+            numbers_surf_right = pygame.transform.rotate(numbers_surf_right, 180)
+
         ny_right = BORDER + center_offset - numbers_surf_right.get_height() // 2
         nx_right = BOARD_PX + BORDER + BORDER // 2 - numbers_surf_right.get_width() // 2
         screen.blit(numbers_surf_right, (nx_right, ny_right))
@@ -232,6 +239,35 @@ def select_game_mode(screen, title_font, option_font, whole_window_w):
                     return "LOCAL" if selected == 0 else "ONLINE"
 
 
+def select_host_or_client(screen, font, whole_window_w):
+    selecting = True
+    selected = 0  # 0 = host, 1 = client
+
+    options = ["Host Game", "Join Game"]
+
+    while selecting:
+        screen.fill(Colours.BOARD_BORDER)
+
+        for i, text in enumerate(options):
+            surf = font.render(text, True, Colours.LABEL)
+            rect = surf.get_rect(center=(whole_window_w // 2, WINDOW_H // 2 + i * 100))
+            screen.blit(surf, rect)
+
+            box = pygame.Rect(rect.x - 20, rect.y - 10, rect.width + 40, rect.height + 20)
+            pygame.draw.rect(screen, Colours.LABEL if i == selected else Colours.GREY, box, 5)
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    selected = (selected - 1) % 2
+                if event.key == pygame.K_DOWN:
+                    selected = (selected + 1) % 2
+                if event.key == pygame.K_RETURN:
+                    return "HOST" if selected == 0 else "CLIENT"
+
+
 def handle_local_input(event, cursor, pieces, current_turn):
     """Handle all keyboard input for a local player controlling the cursor and making moves."""
 
@@ -255,14 +291,15 @@ def handle_local_input(event, cursor, pieces, current_turn):
                 cursor.pickup(pieces.board)
         else:
             # Attempt to drop piece
-            return cursor.drop(pieces.board)
+            success, from_pos, to_pos = cursor.drop(pieces.board)
+            return success, from_pos, to_pos
 
     # Cancel move
     if event.key == pygame.K_RETURN:
         if cursor.holding is not None:
             cursor.cancel(pieces.board)
 
-    return False
+    return False, None, None
 
 
 def apply_move_of_piece(board, from_pos, to_pos):
@@ -287,13 +324,22 @@ def main():
     # Initialize fonts after pygame.init()
     label_font, winner_font, gamemode_title_font, gamemode_option_font = initialize_fonts()
 
-    game_mode = "LOCAL"  # Game mode toggle
-
     screen = pygame.display.set_mode((WHOLE_WINDOW_W, WINDOW_H))
-    pygame.display.set_caption("Chess Board")
-    
+    pygame.display.set_caption("Chess Game")
+
     # Select game mode before starting
     game_mode = select_game_mode(screen, gamemode_title_font, gamemode_option_font, WHOLE_WINDOW_W)
+
+    if game_mode == "ONLINE":
+        role = select_host_or_client(screen, gamemode_option_font, WHOLE_WINDOW_W)
+
+        if role == "HOST":
+            net = Network(is_host=True)
+            player_colour = WHITE
+        else:
+            ip = input("enter host ip: ")
+            net = Network(is_host=False, ip=ip)
+            player_colour = BLACK
 
     clock  = pygame.time.Clock()
     pieces = ChessPieces(SQUARE_SIZE, PIECE_SIZE)  # Class object for each piece
@@ -320,18 +366,29 @@ def main():
                 if event.key == pygame.K_p:
                     test = True
 
-                # Handle MOVEMENT and PICKUP/DROP/CANCEL input based on game mode
-                drop_successful = False
+                # handle movement and pickup/drop/cancel input based on game mode
+                success, from_pos, to_pos = False, None, None
 
                 if game_mode == "LOCAL":
-                    drop_successful = handle_local_input(event, cursor, pieces, current_turn)
+                    success, from_pos, to_pos = handle_local_input(event, cursor, pieces, current_turn)
 
                 elif game_mode == "ONLINE":
-                    # === For now behaves same as local until networking is added ===
-                    drop_successful = handle_local_input(event, cursor, pieces, current_turn)
+
+                    if current_turn == player_colour:
+                        # your turn → allow input
+                        success, from_pos, to_pos = handle_local_input(event, cursor, pieces, current_turn)
+
+                        if success:
+                            net.send({"from": from_pos, "to": to_pos})
+
+                    else:
+                        # opponent's turn → receive move
+                        data = net.receive()
+                        apply_move_of_piece(pieces.board, data["from"], data["to"])
+                        success = True
 
                 # Switch turn only if move succeeded
-                if drop_successful:
+                if success:
                     current_turn = BLACK if current_turn == WHITE else WHITE
                     winner = check_winner(pieces.board)
 
@@ -340,7 +397,7 @@ def main():
 
         # draw everything once
         draw_board(screen)
-        draw_border_labels(screen, label_font)
+        draw_border_labels(screen, label_font, game_mode)
         draw_sidebar(screen)
         cursor.draw_valid_moves(screen, BORDER, SQUARE_SIZE, DOT_RADIUS)  # Grey dots under pieces
         pieces.draw(screen, BORDER, cursor.holding, cursor.holding_from)

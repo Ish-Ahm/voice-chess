@@ -7,26 +7,6 @@ import os
 
 BOARD_SQUARES = 8  # 8x8 chess board
 
-# # Placeholder values, overwritten by apply_resolution_scaling()
-# SQUARE_SIZE               = 140
-# PIECE_SIZE                = 140
-# BORDER                    = 50
-# DOT_RADIUS                = 14
-# CURSOR_THICKNESS          = 8
-# RIGHT_PANEL_WIDTH         = 400
-# GAMEMODE_OPTION_BOXSIZE_W = 500
-# V_PADDING                 = 10
-# H_PADDING                 = 60
-# OUTLINE_THICKNESS         = 5
-# LABEL_FONT_SIZE           = 40
-# WINNER_FONT_SIZE          = 50
-# GAMEMODE_TITLE_FONT_SIZE  = 120
-# GAMEMODE_OPTION_FONT_SIZE = 80
-# BOARD_PX                  = BOARD_SQUARES * SQUARE_SIZE
-# WINDOW_W                  = BOARD_PX + BORDER * 2
-# WINDOW_H                  = BOARD_PX + BORDER * 2
-# WHOLE_WINDOW_W            = WINDOW_W + RIGHT_PANEL_WIDTH
-
 
 # ---- GLOBAL VARIABLES --------------------------------------------
 
@@ -78,10 +58,15 @@ class Colours:
 # Fonts used in the game
 def initialize_fonts():
     """Initialize all game fonts inside main loop"""
- 
-    label_font           = pygame.font.Font("assets/fonts/chinese-rocks-rg.ttf", LABEL_FONT_SIZE)
-    winner_font          = pygame.font.Font("assets/fonts/chinese-rocks-rg.ttf", WINNER_FONT_SIZE)
-    gamemode_title_font  = pygame.font.Font("assets/fonts/chinese-rocks-rg.ttf", GAMEMODE_TITLE_FONT_SIZE)
-    gamemode_option_font = pygame.font.Font("assets/fonts/chinese-rocks-rg.ttf", GAMEMODE_OPTION_FONT_SIZE)
     
+    chinese_rocks_path = "assets/fonts/chinese-rocks-rg.ttf"
+    if not os.path.isfile(chinese_rocks_path):
+        print(f"Error: Font file '{chinese_rocks_path}' not found.")
+        sys.exit(1)
+
+    label_font           = pygame.font.Font(chinese_rocks_path, LABEL_FONT_SIZE)
+    winner_font          = pygame.font.Font(chinese_rocks_path, WINNER_FONT_SIZE)
+    gamemode_title_font  = pygame.font.Font(chinese_rocks_path, GAMEMODE_TITLE_FONT_SIZE)
+    gamemode_option_font = pygame.font.Font(chinese_rocks_path, GAMEMODE_OPTION_FONT_SIZE)
+
     return label_font, winner_font, gamemode_title_font, gamemode_option_font
