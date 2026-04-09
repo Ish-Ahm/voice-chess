@@ -5,7 +5,6 @@ from Chess_Cursor import Cursor
 from Chess_Pieces_Temp import ChessPieces, KING, WHITE, BLACK
 
 
-
 # ---- CHESS BOARD -------------------------------------------------
 
 def draw_board(screen):
@@ -284,7 +283,6 @@ def apply_move_of_piece(board, from_pos, to_pos):
 
 def main():
     pygame.init()
-    apply_resolution_scaling()  # Scale all sizes based on current screen resolution
     
     # Initialize fonts after pygame.init()
     label_font, winner_font, gamemode_title_font, gamemode_option_font = initialize_fonts()

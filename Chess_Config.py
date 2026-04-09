@@ -7,63 +7,58 @@ import os
 
 BOARD_SQUARES = 8  # 8x8 chess board
 
-# Placeholder values, overwritten by apply_resolution_scaling()
-SQUARE_SIZE               = 140
-PIECE_SIZE                = 140
-BORDER                    = 50
-DOT_RADIUS                = 14
-CURSOR_THICKNESS          = 8
-RIGHT_PANEL_WIDTH         = 400
-GAMEMODE_OPTION_BOXSIZE_W = 500
-V_PADDING                 = 10
-H_PADDING                 = 60
-OUTLINE_THICKNESS         = 5
-LABEL_FONT_SIZE           = 40
-WINNER_FONT_SIZE          = 50
-GAMEMODE_TITLE_FONT_SIZE  = 120
-GAMEMODE_OPTION_FONT_SIZE = 80
-BOARD_PX                  = BOARD_SQUARES * SQUARE_SIZE
-WINDOW_W                  = BOARD_PX + BORDER * 2
-WINDOW_H                  = BOARD_PX + BORDER * 2
-WHOLE_WINDOW_W            = WINDOW_W + RIGHT_PANEL_WIDTH
+# # Placeholder values, overwritten by apply_resolution_scaling()
+# SQUARE_SIZE               = 140
+# PIECE_SIZE                = 140
+# BORDER                    = 50
+# DOT_RADIUS                = 14
+# CURSOR_THICKNESS          = 8
+# RIGHT_PANEL_WIDTH         = 400
+# GAMEMODE_OPTION_BOXSIZE_W = 500
+# V_PADDING                 = 10
+# H_PADDING                 = 60
+# OUTLINE_THICKNESS         = 5
+# LABEL_FONT_SIZE           = 40
+# WINNER_FONT_SIZE          = 50
+# GAMEMODE_TITLE_FONT_SIZE  = 120
+# GAMEMODE_OPTION_FONT_SIZE = 80
+# BOARD_PX                  = BOARD_SQUARES * SQUARE_SIZE
+# WINDOW_W                  = BOARD_PX + BORDER * 2
+# WINDOW_H                  = BOARD_PX + BORDER * 2
+# WHOLE_WINDOW_W            = WINDOW_W + RIGHT_PANEL_WIDTH
 
 
-def apply_resolution_scaling():
-    """Scale all size constants to fit the current screen resolution."""
-    
-    screen_info = pygame.display.Info()
-    scale       = min(screen_info.current_w / 2560, screen_info.current_h / 1600)
+# ---- GLOBAL VARIABLES --------------------------------------------
 
-    global SQUARE_SIZE, PIECE_SIZE, BORDER
-    global DOT_RADIUS, RIGHT_PANEL_WIDTH, CURSOR_THICKNESS, BOARD_PX, WINDOW_W, WINDOW_H, WHOLE_WINDOW_W
-    global LABEL_FONT_SIZE, WINNER_FONT_SIZE, GAMEMODE_TITLE_FONT_SIZE, GAMEMODE_OPTION_FONT_SIZE
-    global V_PADDING, H_PADDING, OUTLINE_THICKNESS, GAMEMODE_OPTION_BOXSIZE_W
+pygame.init()
+screen_info = pygame.display.Info()
+scale       = min(screen_info.current_w / 2560, screen_info.current_h / 1600)
 
-    # Board
-    SQUARE_SIZE       = int(140  * scale)
-    PIECE_SIZE        = SQUARE_SIZE
-    BORDER            = int(50   * scale)
-    DOT_RADIUS        = int(14   * scale)
-    CURSOR_THICKNESS  = max(2, int(8   * scale))
+# Board
+SQUARE_SIZE       = int(140  * scale)
+PIECE_SIZE        = SQUARE_SIZE
+BORDER            = int(50   * scale)
+DOT_RADIUS        = int(14   * scale)
+CURSOR_THICKNESS  = max(2, int(8   * scale))
 
-    # Right panel
-    RIGHT_PANEL_WIDTH         = int(400  * scale)
-    GAMEMODE_OPTION_BOXSIZE_W = int(500  * scale)
-    V_PADDING                 = max(1, int(10  * scale))
-    H_PADDING                 = int(60   * scale)
-    OUTLINE_THICKNESS         = max(1, int(5   * scale))
+# Right panel
+RIGHT_PANEL_WIDTH         = int(400  * scale)
+GAMEMODE_OPTION_BOXSIZE_W = int(500  * scale)
+V_PADDING                 = max(1, int(10  * scale))
+H_PADDING                 = int(60   * scale)
+OUTLINE_THICKNESS         = max(1, int(5   * scale))
 
-    # Font sizes
-    LABEL_FONT_SIZE           = int(40   * scale)
-    WINNER_FONT_SIZE          = int(50   * scale)
-    GAMEMODE_TITLE_FONT_SIZE  = int(120  * scale)
-    GAMEMODE_OPTION_FONT_SIZE = int(80   * scale)
+# Font sizes
+LABEL_FONT_SIZE           = int(40   * scale)
+WINNER_FONT_SIZE          = int(50   * scale)
+GAMEMODE_TITLE_FONT_SIZE  = int(120  * scale)
+GAMEMODE_OPTION_FONT_SIZE = int(80   * scale)
 
-    # Derived window dimensions (keep at bottom, depend on values above)
-    BOARD_PX       = BOARD_SQUARES * SQUARE_SIZE
-    WINDOW_W       = BOARD_PX + BORDER * 2
-    WINDOW_H       = BOARD_PX + BORDER * 2
-    WHOLE_WINDOW_W = WINDOW_W + RIGHT_PANEL_WIDTH
+# Derived window dimensions (keep at bottom, depend on values above)
+BOARD_PX       = BOARD_SQUARES * SQUARE_SIZE
+WINDOW_W       = BOARD_PX + BORDER * 2
+WINDOW_H       = BOARD_PX + BORDER * 2
+WHOLE_WINDOW_W = WINDOW_W + RIGHT_PANEL_WIDTH
 
 
 # Colours used in the game
