@@ -10,9 +10,22 @@ class Network:
         if is_host:
             self.sock.bind((ip, port))
             self.sock.listen(1)
-            print("waiting for connection...")
+
+            # print host ip for user
+            import socket
+            hostname = socket.gethostname()
+            local_ip = socket.gethostbyname(hostname)
+
+            print("=================================")
+            print("HOST MODE")
+            print("Host IP:", local_ip)
+            print("Port:", port)
+            print("Waiting for connection...")
+            print("=================================")
+
             self.conn, addr = self.sock.accept()
-            print("connected to", addr)
+            print("Connected to", addr)
+
         else:
             self.sock.connect((ip, port))
             self.conn = self.sock
