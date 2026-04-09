@@ -13,12 +13,14 @@ class Cursor:
 
     def move(self, move_col, move_row, board_size):
         """Move the cursor by (move_col, move_row), clamped within the board."""
+
         self.column = max(0, min(board_size - 1, self.column + move_col))
         self.row = max(0, min(board_size - 1, self.row + move_row))
 
 
     def pickup(self, board):
         """Pick up piece on current square if one exists."""
+
         cell = board[self.row][self.column]
         if cell is not None:
             self.holding      = cell
@@ -38,6 +40,7 @@ class Cursor:
 
     def cancel(self, board):
         """Put the piece back where it came from."""
+
         if self.holding is not None:
             row, column = self.holding_from
             board[row][column] = self.holding
@@ -48,6 +51,7 @@ class Cursor:
         
     def drop(self, board):
         """Drop the held piece only if the destination is a valid move."""
+
         if self.holding is not None:
             destination = (self.row, self.column)
             if destination in self.valid_moves:
@@ -66,6 +70,7 @@ class Cursor:
     
     def draw_valid_moves(self, screen, border, square_size):
         """Draw grey dots on all valid move squares."""
+
         for (row, col) in self.valid_moves:
             # Center of the square
             cx = border + col * square_size + square_size // 2
@@ -75,6 +80,7 @@ class Cursor:
 
     def draw(self, screen, border, square_size):
         """Draw the red cursor outline over the current square."""
+        
         x = border + self.column * square_size
         y = border + self.row * square_size
         cursor_colour = Colours.CURSOR_SELECTED if self.holding else Colours.CURSOR_NORMAL

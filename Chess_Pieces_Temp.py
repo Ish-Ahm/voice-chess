@@ -64,6 +64,7 @@ class ChessPieces:
 
     def _get_image(self, colour, piece_type, index=0, flipped=False):
         """Return the image surface for a piece, optionally rotated."""
+
         surf = self.images[colour][piece_type][index]
         if flipped:
             surf = pygame.transform.rotate(surf, 180)
@@ -76,6 +77,7 @@ class ChessPieces:
 
     def _init_board(self):
         """Create and return the starting chess board."""
+
         board = [[None for _ in range(8)] for _ in range(8)]
 
         # white back rank (row 7)
@@ -124,6 +126,7 @@ class ChessPieces:
 
     def draw(self, screen, border, held_piece=None, held_from=None):
         """Draw all pieces on the board, including the held piece in its original square."""
+        
         for row in range(8):
             for column in range(8):
                 cell = self.board[row][column]

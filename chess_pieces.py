@@ -3,9 +3,9 @@ import sys
 
 pygame.init()
 pygame.display.set_mode((100,100),pygame.HIDDEN)
-font = pygame.font.SysFont('segoeuisymbol,arialunicodems,applesymbols,menlo', 75)
+font = pygame.font.SysFont('segoeuisymbol, arialunicodems, applesymbols, menlo', 150)
 
-TILE_SIZE = 100
+TILE_SIZE = 200
 pieces = ['♚', '♛', '♜', '♝', '♞', '♟']
 
 spritesheet = pygame.Surface((TILE_SIZE * len(pieces), TILE_SIZE * 2), pygame.SRCALPHA)
