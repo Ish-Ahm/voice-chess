@@ -10,25 +10,29 @@ from Chess_Pieces_Temp import ChessPieces, KING, WHITE, BLACK
 
 def apply_resolution_scaling():
     """Scale all size constants to fit the current screen resolution."""
-
     screen_info = pygame.display.Info()
     scale       = min(screen_info.current_w / 2560, screen_info.current_h / 1600)
 
     global SQUARE_SIZE, PIECE_SIZE, BORDER, NORMAL_LABEL_SIZE, WINNER_LABEL_SIZE
     global DOT_RADIUS, RIGHT_PANEL_WIDTH, CURSOR_THICKNESS, BOARD_PX, WINDOW_W, WINDOW_H, WHOLE_WINDOW_W
+    global LABEL_FONT_SIZE, WINNER_FONT_SIZE, GAMEMODE_TITLE_FONT_SIZE, GAMEMODE_OPTION_FONT_SIZE
 
-    SQUARE_SIZE       = int(140 * scale)
-    PIECE_SIZE        = SQUARE_SIZE
-    BORDER            = int(50  * scale)
-    NORMAL_LABEL_SIZE = int(40  * scale)
-    WINNER_LABEL_SIZE = int(50  * scale)
-    DOT_RADIUS        = int(14  * scale)
-    RIGHT_PANEL_WIDTH = int(400 * scale)
-    CURSOR_THICKNESS  = max(2, int(8 * scale))
-    BOARD_PX          = BOARD_SQUARES * SQUARE_SIZE    # Total pixel size of the board (without border)
-    WINDOW_W          = BOARD_PX + BORDER * 2          # Total window width (board + left and right borders)
-    WINDOW_H          = BOARD_PX + BORDER * 2          # Total window height (board + top and bottom borders)
-    WHOLE_WINDOW_W    = WINDOW_W + RIGHT_PANEL_WIDTH   # Total window width including right panel
+    SQUARE_SIZE               = int(140  * scale)
+    PIECE_SIZE                = SQUARE_SIZE
+    BORDER                    = int(50   * scale)
+    DOT_RADIUS                = int(14   * scale)
+    RIGHT_PANEL_WIDTH         = int(400  * scale)
+    CURSOR_THICKNESS          = max(2, int(8   * scale))
+    NORMAL_LABEL_SIZE         = int(40   * scale)
+    WINNER_LABEL_SIZE         = int(50   * scale)
+    LABEL_FONT_SIZE           = int(40   * scale)
+    WINNER_FONT_SIZE          = int(50   * scale)
+    GAMEMODE_TITLE_FONT_SIZE  = int(120  * scale)
+    GAMEMODE_OPTION_FONT_SIZE = int(80   * scale)
+    BOARD_PX                  = BOARD_SQUARES * SQUARE_SIZE
+    WINDOW_W                  = BOARD_PX + BORDER * 2
+    WINDOW_H                  = BOARD_PX + BORDER * 2
+    WHOLE_WINDOW_W            = WINDOW_W + RIGHT_PANEL_WIDTH
 
 
 def draw_board(screen):
