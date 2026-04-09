@@ -4,12 +4,8 @@ import os
 
 
 # --- Configuration ---
+
 BOARD_SQUARES             = 8
-SQUARE_SIZE               = 140            # Size of each square in pixels
-BORDER                    = 60            # Width of the label border around the board
-CURSOR_THICKNESS          = 8             # Thickness of the red cursor outline
-DOT_RADIUS                = 14            # Radius of the valid move dot
-PIECE_SIZE                = SQUARE_SIZE   # Size of piece images (slightly smaller than square for padding)
 GAMEMODE_OPTION_BOXSIZE_W = 500           # Width of the box around gamemode options (should be larger than option text width)
 
 # Font sizes
@@ -23,11 +19,6 @@ RIGHT_PANEL_WIDTH   = 400   # Width of right side panel
 V_PADDING           = 10    # Vertical padding (top/bottom)
 H_PADDING           = 60    # Horizontal padding (left/right)
 OUTLINE_THICKNESS   = 5     # Thickness of the outline around the winner text box
-
-BOARD_PX       = BOARD_SQUARES * SQUARE_SIZE    # Total pixel size of the board (without border)
-WINDOW_W       = BOARD_PX + BORDER * 2          # Total window width (board + left and right borders)
-WINDOW_H       = BOARD_PX + BORDER * 2          # Total window height (board + top and bottom borders)
-WHOLE_WINDOW_W = WINDOW_W + RIGHT_PANEL_WIDTH   # Total window width including right panel
 
 
 # Colours used in the game

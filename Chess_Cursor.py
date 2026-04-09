@@ -68,17 +68,17 @@ class Cursor:
         return False
 
     
-    def draw_valid_moves(self, screen, border, square_size):
+    def draw_valid_moves(self, screen, border, square_size, dot_radius):
         """Draw grey dots on all valid move squares."""
 
         for (row, col) in self.valid_moves:
             # Center of the square
             cx = border + col * square_size + square_size // 2
             cy = border + row * square_size + square_size // 2
-            pygame.draw.circle(screen, Colours.DOT_COLOUR, (cx, cy), DOT_RADIUS)
+            pygame.draw.circle(screen, Colours.DOT_COLOUR, (cx, cy), dot_radius)
 
 
-    def draw(self, screen, border, square_size):
+    def draw(self, screen, border, square_size, cursor_thickness):
         """Draw the red cursor outline over the current square."""
         
         x = border + self.column * square_size
@@ -88,5 +88,5 @@ class Cursor:
             screen,
             cursor_colour,  # colour of cursor
             pygame.Rect(x, y, square_size, square_size),
-            CURSOR_THICKNESS
+            cursor_thickness
         )

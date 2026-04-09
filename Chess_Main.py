@@ -8,6 +8,29 @@ from Chess_Pieces_Temp import ChessPieces, KING, WHITE, BLACK
 
 # ---- CHESS BOARD -------------------------------------------------
 
+def apply_resolution_scaling():
+    """Scale all size constants to fit the current screen resolution."""
+
+    screen_info = pygame.display.Info()
+    scale       = min(screen_info.current_w / 2560, screen_info.current_h / 1600)
+
+    global SQUARE_SIZE, PIECE_SIZE, BORDER, NORMAL_LABEL_SIZE, WINNER_LABEL_SIZE
+    global DOT_RADIUS, RIGHT_PANEL_WIDTH, CURSOR_THICKNESS, BOARD_PX, WINDOW_W, WINDOW_H, WHOLE_WINDOW_W
+
+    SQUARE_SIZE       = int(140 * scale)
+    PIECE_SIZE        = SQUARE_SIZE
+    BORDER            = int(50  * scale)
+    NORMAL_LABEL_SIZE = int(40  * scale)
+    WINNER_LABEL_SIZE = int(50  * scale)
+    DOT_RADIUS        = int(14  * scale)
+    RIGHT_PANEL_WIDTH = int(400 * scale)
+    CURSOR_THICKNESS  = max(2, int(8 * scale))
+    BOARD_PX          = BOARD_SQUARES * SQUARE_SIZE    # Total pixel size of the board (without border)
+    WINDOW_W          = BOARD_PX + BORDER * 2          # Total window width (board + left and right borders)
+    WINDOW_H          = BOARD_PX + BORDER * 2          # Total window height (board + top and bottom borders)
+    WHOLE_WINDOW_W    = WINDOW_W + RIGHT_PANEL_WIDTH   # Total window width including right panel
+
+
 def draw_board(screen):
     """Draw the 8x8 chess board inside the border offset."""
     
@@ -176,7 +199,7 @@ def winner_screen(screen, font, winner):
 
 # ---- GAME LOGIC AND INPUT HANDLING -------------------------------
 
-def select_game_mode(screen, title_font, option_font):
+def select_game_mode(screen, title_font, option_font, whole_window_w):
     """Display a simple menu to allow the player to choose between local and online play."""
 
     selecting = True
@@ -190,20 +213,20 @@ def select_game_mode(screen, title_font, option_font):
 
         # Draw title
         title = title_font.render("- Select Game Mode -", True, Colours.LABEL)
-        title_rect = title.get_rect(center = (WHOLE_WINDOW_W // 2, (WINDOW_H // 2) - 200))
+        title_rect = title.get_rect(center = (whole_window_w // 2, (WINDOW_H // 2) - 200))
         screen.blit(title, title_rect)
 
         # Draw options
         for i, text in enumerate(options):
             colour = Colours.LABEL
             surf = option_font.render(text, True, colour)
-            option_rect = surf.get_rect(center = (WHOLE_WINDOW_W // 2, (WINDOW_H // 2) + (1.5 * i * option_font.get_height())))
+            option_rect = surf.get_rect(center = (whole_window_w // 2, (WINDOW_H // 2) + (1.5 * i * option_font.get_height())))
             screen.blit(surf, option_rect)
 
             # Draw outline box around the selected option
             padding = 10
             box_rect = pygame.Rect(
-                (WHOLE_WINDOW_W // 2) - (GAMEMODE_OPTION_BOXSIZE_W // 2),
+                (whole_window_w // 2) - (GAMEMODE_OPTION_BOXSIZE_W // 2),
                 option_rect.top - padding,
                 GAMEMODE_OPTION_BOXSIZE_W,
                 option_rect.height + padding * 2
@@ -284,6 +307,7 @@ def apply_move_of_piece(board, from_pos, to_pos):
 
 def main():
     pygame.init()
+    apply_resolution_scaling()  # Scale all sizes based on current screen resolution
     
     # Initialize fonts after pygame.init()
     label_font, winner_font, gamemode_title_font, gamemode_option_font = initialize_fonts()
@@ -294,7 +318,7 @@ def main():
     pygame.display.set_caption("Chess Board")
     
     # Select game mode before starting
-    game_mode = select_game_mode(screen, gamemode_title_font, gamemode_option_font)
+    game_mode = select_game_mode(screen, gamemode_title_font, gamemode_option_font, WHOLE_WINDOW_W)
 
     clock  = pygame.time.Clock()
     pieces = ChessPieces(SQUARE_SIZE, PIECE_SIZE)  # Class object for each piece
@@ -343,11 +367,11 @@ def main():
         draw_board(screen)
         draw_border_labels(screen, label_font)
         draw_sidebar(screen)
-        cursor.draw_valid_moves(screen, BORDER, SQUARE_SIZE)  # Grey dots under pieces
+        cursor.draw_valid_moves(screen, BORDER, SQUARE_SIZE, DOT_RADIUS)  # Grey dots under pieces
         pieces.draw(screen, BORDER, cursor.holding, cursor.holding_from)
 
         # Draw cursor
-        cursor.draw(screen, BORDER, SQUARE_SIZE)
+        cursor.draw(screen, BORDER, SQUARE_SIZE, CURSOR_THICKNESS)
 
         # Draw current turn label
         draw_current_turn(screen, label_font, current_turn)
