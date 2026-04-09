@@ -8,41 +8,14 @@ from Chess_Pieces_Temp import ChessPieces, KING, WHITE, BLACK
 
 # ---- CHESS BOARD -------------------------------------------------
 
-def apply_resolution_scaling():
-    """Scale all size constants to fit the current screen resolution."""
-    screen_info = pygame.display.Info()
-    scale       = min(screen_info.current_w / 2560, screen_info.current_h / 1600)
-
-    global SQUARE_SIZE, PIECE_SIZE, BORDER, NORMAL_LABEL_SIZE, WINNER_LABEL_SIZE
-    global DOT_RADIUS, RIGHT_PANEL_WIDTH, CURSOR_THICKNESS, BOARD_PX, WINDOW_W, WINDOW_H, WHOLE_WINDOW_W
-    global LABEL_FONT_SIZE, WINNER_FONT_SIZE, GAMEMODE_TITLE_FONT_SIZE, GAMEMODE_OPTION_FONT_SIZE
-
-    SQUARE_SIZE               = int(140  * scale)
-    PIECE_SIZE                = SQUARE_SIZE
-    BORDER                    = int(50   * scale)
-    DOT_RADIUS                = int(14   * scale)
-    RIGHT_PANEL_WIDTH         = int(400  * scale)
-    CURSOR_THICKNESS          = max(2, int(8   * scale))
-    NORMAL_LABEL_SIZE         = int(40   * scale)
-    WINNER_LABEL_SIZE         = int(50   * scale)
-    LABEL_FONT_SIZE           = int(40   * scale)
-    WINNER_FONT_SIZE          = int(50   * scale)
-    GAMEMODE_TITLE_FONT_SIZE  = int(120  * scale)
-    GAMEMODE_OPTION_FONT_SIZE = int(80   * scale)
-    BOARD_PX                  = BOARD_SQUARES * SQUARE_SIZE
-    WINDOW_W                  = BOARD_PX + BORDER * 2
-    WINDOW_H                  = BOARD_PX + BORDER * 2
-    WHOLE_WINDOW_W            = WINDOW_W + RIGHT_PANEL_WIDTH
-
-
 def draw_board(screen):
     """Draw the 8x8 chess board inside the border offset."""
     
     for row in range(BOARD_SQUARES):
-        for col in range(BOARD_SQUARES):
-            color = Colours.BOARD_LIGHT if (row + col) % 2 == 0 else Colours.BOARD_DARK
-            x = BORDER + col * SQUARE_SIZE
-            y = BORDER + row * SQUARE_SIZE
+        for column in range(BOARD_SQUARES):
+            color = Colours.BOARD_LIGHT if (row + column) % 2 == 0 else Colours.BOARD_DARK
+            x = BORDER + column * SQUARE_SIZE
+            y = BORDER + row    * SQUARE_SIZE
             pygame.draw.rect(screen, color, pygame.Rect(x, y, SQUARE_SIZE, SQUARE_SIZE))
 
 
@@ -318,7 +291,7 @@ def main():
 
     game_mode = "LOCAL"  # Game mode toggle
 
-    screen = pygame.display.set_mode((WINDOW_W + RIGHT_PANEL_WIDTH, WINDOW_H))
+    screen = pygame.display.set_mode((WHOLE_WINDOW_W, WINDOW_H))
     pygame.display.set_caption("Chess Board")
     
     # Select game mode before starting
