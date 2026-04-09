@@ -11,11 +11,13 @@ class Network:
             self.sock.bind((ip, port))
             self.sock.listen(1)
 
-            # print host ip for user
-            import socket
-            hostname = socket.gethostname()
-            local_ip = socket.gethostbyname(hostname)
+            # get correct local ip (works on hotspot/wifi)
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
 
+            # print host ip for user
             print("=================================")
             print("HOST MODE")
             print("Host IP:", local_ip)
